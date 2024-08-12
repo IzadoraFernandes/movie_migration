@@ -14,36 +14,13 @@
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
+                <label for="file">Escolha um arquivo CSV:</label>
+                <input type="file" id="file" name="file" accept=".csv" required>
                 
-                <label for="movies">Movies CSV:</label>
-                <input type="file" name="movies" class="form-control" id="file" required><br>
+                <label for="table_name">Nome da tabela:</label>
+                <input type="text" id="table_name" name="table_name" required>
                 
-                <label for="genome_scores">Genome Scores CSV:</label>
-                <input type="file" name="genome_scores" class="form-control" id="file" required><br>
-                
-                <label for="genome_tags">Genome Tags CSV:</label>
-                <input type="file" name="genome_tags" class="form-control" id="file" required><br>
-                
-                <label for="links">Links CSV:</label>
-                <input type="file" name="links" class="form-control" id="file" required><br>
-                
-                <label for="ratings">Ratings CSV:</label>
-                <input type="file" name="ratings" class="form-control" id="file" required><br>
-                
-                <label for="tags">Tags CSV:</label>
-                <input type="file" name="tags" class="form-control" id="file" required><br>
-                
-                <button type="submit" class="btn btn-success" id="upload-button">Upload</button>
-
-                <div class="progress"
-                    role="progressbar"
-                    arial-label="Example with label"
-                    arial-valuenow="25"
-                    arial-valuemin="0"
-                    arial-valuemax="100" >
-                    <div id="progress-bar" class="progress-bar" style="with: 0%">0</div>
-                </div>
-        
+                <button type="submit">Enviar</button>
             </form>
         </div>
     </div>
