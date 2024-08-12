@@ -4,19 +4,21 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import logging
 import io
+from upload.models import *
+from django.db.models import Q
 
-# Configuração do logger
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Configuração do banco de dados
+
 DATABASE_URI = 'postgresql://postgres:pgadmin@localhost:5432/migration_data'
 engine = create_engine(DATABASE_URI)
 
-# Função para carregar CSV em chunks e inserir no banco
-def load_csv_to_db(file, table_name, chunksize=10000):
+
+def load_csv_to_db(file, table_name):
     try:
-        for chunk in pd.read_csv(io.StringIO(file.read().decode('utf-8')), chunksize=chunksize):
+        for chunk in pd.read_csv(io.StringIO(file.read().decode('utf-8'))):
             chunk.to_sql(table_name, engine, if_exists='append', index=False)
             logger.info(f"Chunk inserido na tabela {table_name}")
     except Exception as e:
@@ -42,3 +44,17 @@ def upload_files(request):
 
         return HttpResponse('Arquivos carregados com sucesso!')
     return render(request, 'upload_form.html')
+
+def search(request):
+    query = request.GET.get('q')
+    results = []
+
+    if query:
+        
+        results = Movie.objects.filter(
+            Q(title__icontains=query) |
+            Q(genres__name__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+
+    return render(request, 'search_results.html', {'results': results, 'query': query})
